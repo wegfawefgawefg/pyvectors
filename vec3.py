@@ -11,7 +11,11 @@ class Vec3:
     def norm(self):
         mag = self.mag()
         if mag > 0:
-            self.x, self.y, self.z = self.x / mag, self.y / mag, self.z / mag
+            return Vec3(
+                self.x / mag,
+                self.y / mag,
+                self.z / mag,
+            )
         return self
 
     def __add__(self, other):
@@ -32,6 +36,13 @@ class Vec3:
     def dot(self, vec2):
         return self.x * vec2.x + self.y * vec2.y + self.z * vec2.z
 
+    def cross(self, vec2):
+        return Vec3(
+            self.y * vec2.z - self.z * vec2.y,
+            self.z * vec2.x - self.x * vec2.z,
+            self.x * vec2.y - self.y * vec2.x
+        )
+
     def __repr__(self):
         return (self.x, self.y, self.z).__repr__()
 
@@ -44,6 +55,10 @@ class Vec3:
             min(max(self.y, low), high),
             min(max(self.z, low), high),
         )
+
+    @classmethod
+    def unit(self):
+        return Vec3(1, 1, 1)
 
     @classmethod
     def random(self):

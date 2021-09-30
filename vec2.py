@@ -11,7 +11,10 @@ class Vec2:
     def norm(self):
         mag = self.mag()
         if mag > 0:
-            self.x, self.y = self.x / mag, self.y / mag
+            return Vec2(
+                self.x / mag,
+                self.y / mag,
+            )
         return self
 
     def __add__(self, other):
@@ -31,6 +34,9 @@ class Vec2:
 
     def dot(self, vec2):
         return self.x * vec2.x + self.y * vec2.y
+    
+    def cross(self, vec2):
+        return self.x * vec2.y - self.y * vec2.x
 
     def __repr__(self):
         return (self.x, self.y, ).__repr__()
