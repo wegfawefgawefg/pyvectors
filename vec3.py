@@ -67,3 +67,106 @@ class Vec3:
             random.random(), 
             random.random()
         )
+
+class Mat4:
+    def __init__(self, 
+            a=[1, 0, 0, 0],
+            b=[0, 1, 0, 0],
+            c=[0, 0, 1, 0],
+            d=[0, 0, 0, 1]
+        ) -> None:
+        self.m = [a, b, c, d]
+    
+    def __repr__(self) -> str:
+        return self.m.__repr__()
+
+    @classmethod
+    def rotate_x(cls, angle: float) -> 'Mat4':
+        return Mat4(
+            [1, 0, 0, 0],
+            [0, math.cos(angle), -math.sin(angle), 0],
+            [0, math.sin(angle), math.cos(angle), 0],
+            [0, 0, 0, 1],
+        )
+    
+    @classmethod
+    def rotate_y(cls, angle: float) -> 'Mat4':
+        return Mat4(
+            [math.cos(angle), 0, math.sin(angle), 0],
+            [0, 1, 0, 0],
+            [-math.sin(angle), 0, math.cos(angle), 0],
+            [0, 0, 0, 1],
+        )
+
+    @classmethod
+    def rotate_z(cls, angle: float) -> 'Mat4':
+        return Mat4(
+            [math.cos(angle), -math.sin(angle), 0, 0],
+            [math.sin(angle), math.cos(angle), 0, 0],
+            [0, 0, 1, 0],
+            [0, 0, 0, 1],
+        )
+
+    @classmethod
+    def rot(cls, x, y, z):
+        return Mat4.rotate_x(x) * Mat4.rotate_y(y) * Mat4.rotate_z(z)
+
+    @classmethod
+    def scale(cls, x, y, z) -> 'Mat4':
+        return Mat4(
+            [x, 0, 0, 0],
+            [0, y, 0, 0],
+            [0, 0, z, 0],
+            [0, 0, 0, 1],
+        )
+    
+    @classmethod
+    def translate(cls, x: float, y: float, z: float) -> 'Mat4':
+        return Mat4(
+            [1, 0, 0, 0],
+            [0, 1, 0, 0],
+            [0, 0, 1, 0],
+            [x, y, z, 1],
+        )
+    
+    def __mul__(self, other):
+        if isinstance(other, Vec3):
+            return Vec3(
+                self.m[0][0] * other.x + self.m[0][1] * other.y + self.m[0][2] * other.z + self.m[0][3],
+                self.m[1][0] * other.x + self.m[1][1] * other.y + self.m[1][2] * other.z + self.m[1][3],
+                self.m[2][0] * other.x + self.m[2][1] * other.y + self.m[2][2] * other.z + self.m[2][3],
+            )
+        elif isinstance(other, Mat4):
+            return Mat4(
+                [
+                    self.m[0][0] * other.m[0][0] + self.m[0][1] * other.m[1][0] + self.m[0][2] * other.m[2][0] + self.m[0][3] * other.m[3][0],
+                    self.m[0][0] * other.m[0][1] + self.m[0][1] * other.m[1][1] + self.m[0][2] * other.m[2][1] + self.m[0][3] * other.m[3][1],
+                    self.m[0][0] * other.m[0][2] + self.m[0][1] * other.m[1][2] + self.m[0][2] * other.m[2][2] + self.m[0][3] * other.m[3][2],
+                    self.m[0][0] * other.m[0][3] + self.m[0][1] * other.m[1][3] + self.m[0][2] * other.m[2][3] + self.m[0][3] * other.m[3][3],
+                ],
+                [
+                    self.m[1][0] * other.m[0][0] + self.m[1][1] * other.m[1][0] + self.m[1][2] * other.m[2][0] + self.m[1][3] * other.m[3][0],
+                    self.m[1][0] * other.m[0][1] + self.m[1][1] * other.m[1][1] + self.m[1][2] * other.m[2][1] + self.m[1][3] * other.m[3][1],
+                    self.m[1][0] * other.m[0][2] + self.m[1][1] * other.m[1][2] + self.m[1][2] * other.m[2][2] + self.m[1][3] * other.m[3][2],
+                    self.m[1][0] * other.m[0][3] + self.m[1][1] * other.m[1][3] + self.m[1][2] * other.m[2][3] + self.m[1][3] * other.m[3][3],
+                ],
+                [
+                    self.m[2][0] * other.m[0][0] + self.m[2][1] * other.m[1][0] + self.m[2][2] * other.m[2][0] + self.m[2][3] * other.m[3][0],
+                    self.m[2][0] * other.m[0][1] + self.m[2][1] * other.m[1][1] + self.m[2][2] * other.m[2][1] + self.m[2][3] * other.m[3][1],
+                    self.m[2][0] * other.m[0][2] + self.m[2][1] * other.m[1][2] + self.m[2][2] * other.m[2][2] + self.m[2][3] * other.m[3][2],
+                    self.m[2][0] * other.m[0][3] + self.m[2][1] * other.m[1][3] + self.m[2][2] * other.m[2][3] + self.m[2][3] * other.m[3][3],
+                ],
+                [
+                    self.m[3][0] * other.m[0][0] + self.m[3][1] * other.m[1][0] + self.m[3][2] * other.m[2][0] + self.m[3][3] * other.m[3][0],
+                    self.m[3][0] * other.m[0][1] + self.m[3][1] * other.m[1][1] + self.m[3][2] * other.m[2][1] + self.m[3][3] * other.m[3][1],
+                    self.m[3][0] * other.m[0][2] + self.m[3][1] * other.m[1][2] + self.m[3][2] * other.m[2][2] + self.m[3][3] * other.m[3][2],
+                    self.m[3][0] * other.m[0][3] + self.m[3][1] * other.m[1][3] + self.m[3][2] * other.m[2][3] + self.m[3][3] * other.m[3][3],
+                ],
+            )
+        else:
+            raise TypeError(f"Mat4.__mul__: Can't multiply {type(self)} with {type(other)}")
+
+            
+        
+
+            
