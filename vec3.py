@@ -31,7 +31,7 @@ class Vec3:
         return self.__mul__(other)
 
     def __truediv__(self, other):
-        return Vec3(self.x / other, self.y / other, self.x / other)
+        return Vec3(self.x / other, self.y / other, self.z / other)
 
     def dot(self, vec2):
         return self.x * vec2.x + self.y * vec2.y + self.z * vec2.z
